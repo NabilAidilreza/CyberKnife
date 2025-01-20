@@ -1,2 +1,2 @@
 # CTF_Basics
-A Python program for solving basic CTF problems
+A Python tool for help with basic CTF problems.
