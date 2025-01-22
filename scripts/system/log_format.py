@@ -1,46 +1,44 @@
-from rich.traceback import install
+from rich.console import Console
 
-install()
+def success(text, console=Console()):
+    console.print("[green1][+] " + text + "[/green1]")
 
-def success(text,console):
-    console.print("[bright_green][+] " + text + "[/bright_green]")
+def failure(text, console=Console()):
+    console.print("[red1][-] " + text + "[/red1]")
 
-def failure(text,console):
-    console.print("[bright_red][-] " + text + "[/bright_red]")
+def question(text, console=Console()):
+    console.print("[deep_sky_blue1][?] " + text + "[/deep_sky_blue1]", end="")
+    return input("")
 
-def question(text,console):
-    console.print("[turquoise2][?] " + text + "[/turquoise2]")
+def warning(text, console=Console()):
+    console.print("[gold1][!] " + text + " [!][/gold1]")
 
-def warning(text,console):
-    console.print("[yellow][!] " + text + "[/yellow]")
+def processing(text, console=Console()):
+    console.print("[medium_purple][*] " + text + " [*][/medium_purple]")
 
-def processing(text,console):
-    console.print("[bright_magenta][*] " + text + "[/bright_magenta]")
+def approx(text, console=Console()):
+    console.print("[light_slate_grey][~] " + text + "[/light_slate_grey]")
 
-def approx(text,console):
-    console.print("[dark_red][~] " + text + "[/dark_red]")
+def user(text, console=Console()):
+    console.print("[medium_purple]\[@] " + text + "[/medium_purple]")
 
-def user(text,console):
-    console.print("[purple]\[@] " + text + "[/purple]")
+def progress(text, console=Console()):
+    console.print("[chartreuse1][%] " + text + "[/chartreuse1]")
 
-def progress(text,console):
-    console.print("[green][%] " + text + "[/green]")
+def comment(text, console=Console()):
+    console.print("[grey54]\[#] " + text + "[/grey54]")
 
-def comment(text,console):
-    console.print(f"[bright_black]\[#] " + text + "[/bright_black]")
+def dataout(text, console=Console()):
+    console.print("[cyan1][>] " + text + "[/cyan1]")
 
-def dataout(text,console):
-    console.print("[cyan][>] " + text + "[/cyan]")
+def datain(text, console=Console()):
+    console.print("[dodger_blue1][<] " + text + "[/dodger_blue1]")
 
-def datain(text,console):
-    console.print("[blue][<] " + text + "[/blue]")
+def fatal(text, console=Console()):
+    console.print("[red3][X] " + text + "[/red3]")
 
-def fatal(text,console):
-    console.print("[bright_red][X] " + text + "[/bright_red]")
+def finalok(text, console=Console()):
+    console.print("[spring_green1](OK) " + text + "[/spring_green1]")
 
-def finalok(text,console):
-    console.print("[bright_green](OK) " + text + "[/bright_green]")
-
-def finalstop(text,console):
+def finalstop(text, console=Console()):
     console.print("[bright_red](FAIL) " + text + "[/bright_red]")
-

@@ -1,13 +1,17 @@
 import io
 from rich.console import Console
-import scripts.system.log_format as log_format
+import system.log_format as log_format
 
-def test_function(func, text,expected_value):
+def test_function(func, text, expected_value):
     console_output = io.StringIO()
     console = Console(file=console_output, force_terminal=True)
     func(text, console)
     output = console_output.getvalue().strip()
-    print(output)
+
+    if output == expected_value:
+        print(f"Test Passed: {output}")
+    else:
+        print(f"Test Failed: Expected '{expected_value}', but got '{output}'")
 
 def run_tests():
     test_cases = [
