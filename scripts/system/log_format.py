@@ -1,5 +1,8 @@
 from rich.console import Console
 
+def print(object, console=Console()):
+    console.print(object)
+
 def success(text, console=Console()):
     console.print("[green1][+] " + text + "[/green1]")
 

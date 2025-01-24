@@ -27,18 +27,25 @@ def main():
 
     #! MAIN FUNCTIONS #
     def handle_crypto():
-            cry_choice = multi_prompt(["Encrypt text","Decrypt text","Back"],"Options")
-            if cry_choice == "Back":
-                return
-            text = get_text_from_source("Ciphertext: "if cry_choice == "Decrypt text" else "Plaintext: ",file_names,target_folder)
-            key = get_text_from_source("Key: ",file_names,target_folder)
-            lf.warning("INPUT READ")
-            lf.datain(f"Ciphertext: {text}") if cry_choice == "Decrypt text" else lf.datain(f"Plaintext: {text}")
-            lf.datain(f"Key: {key}")
-            execute_ciphers("encrypt" if cry_choice == "Encrypt text" else "decrypt", text, key)
+        cry_choice = multi_prompt(["Encrypt text","Decrypt text","Back"],"Options")
+        if cry_choice == "Back":
+            return
+        text = get_text_from_source("Ciphertext: "if cry_choice == "Decrypt text" else "Plaintext: ",file_names,target_folder)
+        key = get_text_from_source("Key: ",file_names,target_folder)
+        lf.warning("INPUT READ")
+        lf.datain(f"Ciphertext: {text}") if cry_choice == "Decrypt text" else lf.datain(f"Plaintext: {text}")
+        lf.datain(f"Key: {key}")
+        execute_ciphers("encrypt" if cry_choice == "Encrypt text" else "decrypt", text, key)
 
-    def handle_file_analysis():
-        pass
+    def forensics():
+        foren_choice = multi_prompt(["Hex Viewer","EXIF Image","Back"],"Options")
+        match foren_choice:
+            case "Back":
+                return
+            case "Hex Viewer":
+                hex_reader(file_names,target_folder)
+            case "EXIF Image":
+                exif_tool(file_names,target_folder)
 
     def handle_option_3():
         pass
@@ -59,7 +66,7 @@ def main():
     #! MENU ACTIONS #
     menu_actions = {
         "1": lambda: handle_crypto(),
-        "2": lambda: handle_file_analysis(),
+        "2": lambda: forensics(),
         "3": lambda: handle_option_3(),
         "4": lambda: handle_option_4(),
         "5": lambda: handle_settings(),
@@ -73,7 +80,7 @@ def main():
     console.print(tree)
     console.print("\nOptions\n\
     1. [green]Cryptography[/green]\n\
-    2. [yellow]File Analysis[/yellow]\n\
+    2. [yellow]Forensics[/yellow]\n\
     3. [violet]?[/violet]\n\
     4. [magenta]?[/magenta]\n\
     5. [cyan]Change settings[/cyan]\n\
