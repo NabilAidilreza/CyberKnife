@@ -7,9 +7,9 @@ CTFSwissAK is a versatile tool designed to help you tackle common CTF problems w
 ---
 
 ## Features
-- **Cryptography**: Decode/encode Base64, Hex, XOR, ROT13, and more.
+- **Cryptography**: Decode/encode Base64, Hex, XOR, Ciphers, and more.
 - **File Analysis**: Analyze files for hidden data, metadata, or embedded content.
-- **Steganography**: Extract hidden messages from images or audio files.
+- **OSINT**: Search for relevant information via keywords and usernames.
 - **Automation**: Automate repetitive tasks to focus on solving challenges.
 
 ---
