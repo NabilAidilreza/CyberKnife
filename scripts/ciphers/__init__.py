@@ -2,6 +2,7 @@ import importlib
 import pkgutil
 import os
 import base64
+import base58
 
 # Make base64 available in the package namespace
 __all__ = ["base64"]

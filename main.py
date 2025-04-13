@@ -1,18 +1,38 @@
+import time
 import scripts.system.log_format as lf
 from scripts.system import *
 from scripts.ciphers import *
-from pyfiglet import Figlet
+from rich.prompt import Prompt
+from rich.panel import Panel
+from rich.progress import track
 from rich.traceback import install
 install()
 
-# term-image
-# textual
+version = "1.0"
 
 
-def main():
+console = Console()
+
+def setup():
+    global version
+    boot_msgs = [
+        "[green]Initializing core modules...[/]",
+        "[green]Loading memory blocks...[/]",
+        "[green]Patching kernel exploits...[/]",
+        "[green]Spoofing MAC address...[/]",
+        "[green]Bypassing authentication...[/]",
+        "[green]Access granted.[/]",
+    ]
+    console.print(Panel.fit(f"CyberKnife v{version} - Python Multitool for CTFs", title="[bold cyan]Initializer", border_style="bright_blue"))
+    for msg in boot_msgs:
+        console.print(msg)
+        time.sleep(0.3)
+    
+    console.print("\n[bold green]Boot sequence complete.[/]\n")
+    time.sleep(1)
+
+def core():
     #! INITIAL SETUP #
-    console = Console()
-    f = Figlet()
     target_folder = "default"
     try:
         directory = os.path.abspath(target_folder)
@@ -28,12 +48,15 @@ def main():
         cry_choice = multi_prompt(["Encrypt text","Decrypt text","Back"],"Options")
         if cry_choice == "Back":
             return
+        lf.warning("GET TEXT")
         text = get_text_from_source("Ciphertext: "if cry_choice == "Decrypt text" else "Plaintext: ",file_names,target_folder)
+        lf.warning("GET KEY")
         key = get_text_from_source("Key: ",file_names,target_folder)
         lf.warning("INPUT READ")
         lf.datain(f"Ciphertext: {text}") if cry_choice == "Decrypt text" else lf.datain(f"Plaintext: {text}")
         lf.datain(f"Key: {key}")
-        execute_ciphers("encrypt" if cry_choice == "Encrypt text" else "decrypt", text, key)
+        if text != None or key != None:
+            execute_ciphers("encrypt" if cry_choice == "Encrypt text" else "decrypt", text, key)
 
     def forensics():
         foren_choice = multi_prompt(["Hex Viewer","EXIF Image","Back"],"Options")
@@ -72,31 +95,63 @@ def main():
         return main()
     
     #! MENU ACTIONS #
-    menu_actions = {
-        "1": lambda: handle_crypto(),
-        "2": lambda: forensics(),
-        "3": lambda: osint(),
-        "4": lambda: misc(),
-        "5": lambda: delete_file(),
-        "6": lambda: exit_program(),
-        "clr": lambda: back_to_main()
+    options = {
+        "1": {
+            "title": "Cryptography",
+            "color":"green",
+            "action": lambda: handle_crypto()
+        },
+        "2": {
+            "title": "Forensics",
+            "color":"yellow",
+            "action": lambda: forensics()
+        },
+        "3": {
+            "title": "OSINT",
+            "color":"violet",
+            "action": lambda: osint()
+        },
+        "4": {
+            "title": "Misc",
+            "color":"magenta",
+            "action": lambda: misc()
+        },
+        "5": {
+            "title": "Delete file",
+            "color":"cyan",
+            "action": lambda: delete_file()
+        },
+        "6": {
+            "title": "Exit",
+            "color":"red",
+            "action": lambda: exit_program()
+        },
+        "clr": {
+            "title": "Input 'clr' to clear console",
+            "color":"yellow",
+            "action": lambda: back_to_main()
+        }
     }
+    return target_folder, tree, options
 
+def menu(target_folder, tree, options):
     #! MAIN LOOP #
-    console.print(f.renderText('CTF Basics'))
-    console.print(f"[yellow]Current target folder:[/yellow] {target_folder}")
+    console.print(f"[green]Current target folder:[/green] {target_folder}")
     console.print(tree)
-    console.print("\nOptions\n\
-    1. [green]Cryptography[/green]\n\
-    2. [yellow]Forensics[/yellow]\n\
-    3. [violet]OSINT[/violet]\n\
-    4. [magenta]Misc[/magenta]\n\
-    5. [cyan]Delete file[/cyan]\n\
-    6. [red]Exit[/red]\n\
-    Input 'clr' to clear console\n")
+    console.print("\n[bold green]Available Modules:[/]")
+    for key, dict in options.items():
+        color = dict["color"]
+        title = dict["title"]
+        console.print(f"[{color}]{key}[/{color}]: {title}")
+
     while True:
-        choice = input("Input: ")
-        menu_actions.get(choice, lambda: None)()
+        choice = Prompt.ask("\n[bold green]Select an option[/]", choices=options.keys(), default="5")
+        options[choice]["action"]()
+
+def main():
+    setup()
+    a,b,c=core()
+    menu(a,b,c)
 
 if __name__ == "__main__":
     main()
