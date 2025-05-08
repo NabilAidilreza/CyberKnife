@@ -34,6 +34,18 @@ def multi_prompt(options,msg):
         "choices": options})
     return prompt_option[0]
 
+def get_bool(question):
+    lf.processing(question)
+    source = multi_prompt(["Yes","No"],"Options")
+    if source == "No":
+        return False
+    return True
+
+def get_string(title,question):
+    lf.processing(title)
+    data = input(question)
+    return data
+
 def get_text_from_source(msg,file_names,target_folder):
     lf.processing("Read via file or text?")
     source = multi_prompt(["From file","From text"],"Options")

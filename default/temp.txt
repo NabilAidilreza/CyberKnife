@@ -1,0 +1,21 @@
+[+]	✅ Success / Found something	[+] Password cracked: admin123
+[-]	❌ Failure / Not found	[-] No vulnerabilities detected
+[?]	❓ User input required / Uncertainty	[?] Enter target IP:
+[*]	ℹ️ Informational / Processing	[*] Running Nmap scan...
+[!]	⚠️ Warning / Error	[!] Connection timed out!
+[~]	🔄 Approximate result / Estimation	[~] Estimated time left: 2m
+[@]	👤 Username / Identity reference	[@] Logged in as root
+[$]	💰 Money / Cost / Payment	[$] Estimated cost: $1.50
+[%]	📊 Progress percentage	[%] 80% complete...
+[#]	🔍 Comment / Section marker	[#] Debug mode enabled
+[DEBUG]	🛠️ Debugging output	[DEBUG] Checking session tokens...
+[SEC]	🔐 Security-related message	[SEC] SSL encryption enabled
+[CRITICAL]	🚨 Critical error	[CRITICAL] Memory corruption detected!
+[>]	🚀 Running command / Execution	[>] python exploit.py --target 192.168.1.1
+[<]	⬅️ Receiving input / Data received	[<] Response: HTTP 200 OK
+[=]	📡 Network-related output	[=] Connecting to server...
+[x]	❌ Fatal error / Stop	[x] Exploit failed: Invalid target
+[**]	🔵 Status updates	[**] Running privilege escalation check...
+[::]	🏗 Structural marker / Section divider	[::] Beginning brute-force attack...
+(OK)	✅ Confirmation / Successfully completed	(OK) Exploit executed successfully
+(FAIL)	❌ Operation failed	(FAIL) Could not connect to database
