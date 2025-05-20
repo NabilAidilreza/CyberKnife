@@ -1,6 +1,6 @@
 import io
 from rich.console import Console
-import system.log_format as log_format
+import log_format as log_format
 
 def test_function(func, text, expected_value):
     console_output = io.StringIO()

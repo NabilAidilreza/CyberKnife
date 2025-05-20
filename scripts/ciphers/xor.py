@@ -32,7 +32,7 @@ def encrypt(plaintext, key):
     return encrypted_text#, encryption_steps
 
 # Decryption function
-def decrypt(encrypted_text, key):
+def decrypt(encrypted_text,flag_format, key):
     decryption_steps = []
     decrypted_text = ""
     for i in range(0, len(encrypted_text), 2):
@@ -48,7 +48,8 @@ def decrypt(encrypted_text, key):
                                  char, 
                                  ord(char)])
         decrypted_text += char
-
+    if flag_format in decrypted_text:
+        return f"[+] Flag found: {decrypted_text}"
     return decrypted_text#, decryption_steps
 
 

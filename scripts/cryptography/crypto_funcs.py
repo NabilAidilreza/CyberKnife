@@ -6,7 +6,7 @@ from time import sleep
 from .freq_analysis import *
 
 #* ### Cryptography ###
-def try_decrypt_ciphers(ciphertext, key=None):
+def try_decrypt_ciphers(ciphertext, flag_format,key=None):
     results = {}
     for module_name in os.listdir('scripts/ciphers'):
         if module_name.endswith('.py') and module_name != '__init__.py':
@@ -15,13 +15,13 @@ def try_decrypt_ciphers(ciphertext, key=None):
                 cipher_module = importlib.import_module(f'scripts.ciphers.{cipher_name}')
                 # Call the decryption function dynamically
                 if hasattr(cipher_module, 'decrypt'):
-                    decrypted_text = cipher_module.decrypt(ciphertext, key)
+                    decrypted_text = cipher_module.decrypt(ciphertext,flag_format,key)
                     results[cipher_name] = decrypted_text
             except Exception as e:
                 results[cipher_name] = f"fail => {str(e)}"
     return results
 
-def try_encrypt_ciphers(plaintext, key=None):
+def try_encrypt_ciphers(plaintext,key=None):
     results = {}
     for module_name in os.listdir('scripts/ciphers'):
         if module_name.endswith('.py') and module_name != '__init__.py':
@@ -36,9 +36,9 @@ def try_encrypt_ciphers(plaintext, key=None):
                 results[cipher_name] = f"fail => {str(e)}"
     return results
 
-def execute_ciphers(operation, text, key):
+def execute_ciphers(operation, text,flag_format, key):
     lf.warning(f"ATTEMPTING {operation.upper()}ION")
-    results = try_encrypt_ciphers(text, key) if operation == "encrypt" else try_decrypt_ciphers(text, key)
+    results = try_encrypt_ciphers(text, key) if operation == "encrypt" else try_decrypt_ciphers(text,flag_format, key)
     for cipher, result in results.items():
         sleep(0.1)
         lf.failure(f"{operation.capitalize()} using {cipher} => {result}") if "fail" in result else lf.success(f"{operation.capitalize()} using {cipher} => {result}")

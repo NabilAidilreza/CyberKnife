@@ -9,7 +9,7 @@ def encrypt(text,key=None):
             result += char 
     return result
 
-def decrypt(text,key=None):
+def decrypt(text,flag_format,key=None):
     result = ''
     for char in text:
         if char.isalpha():  # Check if the character is a letter
@@ -18,4 +18,6 @@ def decrypt(text,key=None):
             result += chr(shift_base + (25 - (ord(char) - shift_base)))
         else:
             result += char 
+    if flag_format in result:
+        return f"[+] Flag found: {result}"
     return result

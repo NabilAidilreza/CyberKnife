@@ -17,21 +17,22 @@ def encrypt(plain_text, key):
            encrypted += plain_text[i]
    return encrypted
 
-def decrypt(cipher_text, key):
+def decrypt(cipher_text, flag_format, key):
     decrypted = ''
-    # Repeat  key to match the length of the ciphertext.
-    keys_text = (key * (len(cipher_text) // len(key))) + key[:len(cipher_text) % len(key)]
-    for i in range(len(cipher_text)):
-        # Check if alphabet letter
-        if cipher_text[i].isalpha():
-            # Calculate  shift based on  corresponding key letter.
-            shift = ord(keys_text[i].upper()) - ord('A')
-            # Decrypt uppercase and lowercase letters separately.
-            if cipher_text[i].isupper():
-                decrypted += chr((ord(cipher_text[i]) - shift - ord('A')) % 26 + ord('A'))
+    key_index = 0  # Track index only for alphabetic characters
+
+    for char in cipher_text:
+        if char.isalpha():
+            shift = ord(key[key_index % len(key)].upper()) - ord('A')
+            if char.isupper():
+                decrypted += chr((ord(char) - shift - ord('A')) % 26 + ord('A'))
             else:
-                decrypted += chr((ord(cipher_text[i]) - shift - ord('a')) % 26 + ord('a'))
+                decrypted += chr((ord(char) - shift - ord('a')) % 26 + ord('a'))
+            key_index += 1  # Only advance key index for letters
         else:
-            # If character is not an alphabet letter, keep it unchanged
-            decrypted += cipher_text[i]
+            decrypted += char  # Non-letters stay unchanged
+
+    if flag_format in decrypted:
+        return f"[+] Flag found: {decrypted}"
     return decrypted
+

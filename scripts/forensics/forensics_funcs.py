@@ -3,8 +3,12 @@ import scripts.system.log_format as lf
 import webbrowser
 from rich.table import Table
 from PIL.ExifTags import TAGS
+from PIL import Image
 from scripts.system.general_funcs import *
+from scripts.system import is_valid_image_pil
 
+from zlib import crc32
+import struct
 
 #* Forensics ###
 def hex_reader(file_names,target_folder):
@@ -63,9 +67,43 @@ def exif_tool(file_names,target_folder):
 def extract_text_from_image():
     webbrowser.open("https://www.imagetotext.info/")
 
-# def run_binwalk(file_names,target_folder):
-#     target_file_name = multi_prompt(file_names,"Choose File")
-#     file_path = os.path.join(target_folder, target_file_name)
-#     for module in binwalk.scan(file_path, signature=True, quiet=True):
-#         for result in module.results:
-#             lf.dataout(f"Offset: {result.offset}, Description: {result.description}")
+def png_dimensions_bruteforcer(file_names,target_folder):
+    target_file_name = multi_prompt(file_names,"Choose File")
+    file_path = os.path.join(target_folder, target_file_name)
+
+    MAX_WIDTH = 3200
+    MAX_HEIGHT = 3200
+
+    lf.progress('='*51)
+    lf.warning('PNG Image Dimension Bruteforcer')
+    lf.comment('Brute force the image dimensions of a PNG image.')
+    lf.progress('='*51 + '\n')
+
+    png = bytearray(open(file_path, 'rb').read())
+
+    # Pull crc
+    crcStart = 29
+    crcTarget = (bytearray(png[crcStart:crcStart+4])).hex()
+    crcFound = False
+    lf.processing("Attempting values...")
+    for width in range(MAX_WIDTH):
+        for height in range(MAX_HEIGHT):
+
+            png[0x10:0x14] = struct.pack(">I",width)
+            png[0x14:0x18] = struct.pack(">I",height)
+
+            calculatedCrc = crc32(png[12:29])
+            if calculatedCrc == int(crcTarget, 16):
+                crcFound = True
+                lf.success('Found Correct Dimensions...\nWidth: {}\nHeight: {}'.format(width, height))
+                lf.warning('Remember to pad this with leading 0\'s as required.')
+                with open('fixed.png','wb') as file:
+                    file.write(png)
+                    lf.finalok('\nSuccessfully wrote to: fixed.png')
+                break
+        else:
+            continue
+        break
+
+    if (not crcFound):
+        lf.failure('Exhausted all dimensions up to (Width, Height): ({}, {})'.format(MAX_WIDTH, MAX_HEIGHT))

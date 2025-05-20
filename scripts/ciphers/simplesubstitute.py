@@ -17,7 +17,7 @@ def encrypt(plaintext, key):
             ciphertext += char
     return ciphertext
 
-def decrypt(ciphertext, key):
+def decrypt(ciphertext, flag_format, key):
     substitution_dict = create_substitution_dict(key)
     # Reverse the substitution dictionary for decryption
     reverse_dict = {v: k for k, v in substitution_dict.items()}
@@ -28,4 +28,6 @@ def decrypt(ciphertext, key):
             plaintext += reverse_dict.get(char, char)
         else:
             plaintext += char
+    if flag_format in plaintext:
+        return f"[+] Flag found: {plaintext}"
     return plaintext

@@ -1,8 +1,6 @@
 import os
-import time
 import pathlib
 
-from rich.console import Console
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.traceback import install
@@ -16,19 +14,18 @@ from scripts.osint import *
 from scripts.crackers import *
 
 install()
-console = Console()
 version = "1.0"
 
 #! Menu
 #? Cryptography
-# Decoder Bin/Hex/Base64
 # Encryption
-# Decryption add in flag format
+# Decryption
 # Freq Analysis
 #? Forensics
 # EXIF Tool
 # Hex View
 # Text Extract
+# PNG BruteForce Dimensions
 # Aperisolve
 # Wireshark
 #? OSINT
@@ -39,7 +36,28 @@ version = "1.0"
 # Bcrypt Cracker
 #? Attack Vectors
 #? Misc
-# Connect via netcat
+# Netcat
+# Bin/Decimal/Hex to ASCII
+# Flag Finder
+
+import json
+
+CONFIG_FILE = "config.json"
+
+def load_config():
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"flag_format": "???"}
+
+def save_config(config):
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config, f, indent=4)
+
+config = load_config()
+flag_format = config.get("flag_format")
+target_folder_path = config.get("target_folder_path")
 
 def setup():
     console.print(Panel.fit(
@@ -47,18 +65,6 @@ def setup():
         title="[bold cyan]Initializer", 
         border_style="bright_blue"
     ))
-
-    boot_msgs = [
-        "[green]Loading scripts...[/]",
-        "[green]Loading main menu...[/]"
-    ]
-
-    for msg in boot_msgs:
-        console.print(msg)
-        time.sleep(0.1)
-
-    console.print("\n[bold green]Boot sequence complete.[/]\n")
-    time.sleep(1)
 
 def initialize_directory(target_folder="default"):
     try:
@@ -72,12 +78,24 @@ def initialize_directory(target_folder="default"):
     file_names = walk_directory(pathlib.Path(directory), tree)
     return target_folder, tree, file_names
 
+def handle_flag_format():
+    global flag_format, config
+    choice = multi_prompt(["Change", "Back"], "Options")
+    if choice == "Back":
+        return
+    new_flag_format = get_string("GET FLAG FORMAT", "New flag format? (i.e CDDC2025): ")
+    flag_format = new_flag_format
+    config["flag_format"] = flag_format
+    save_config(config)
+    lf.success(f"Flag format set to {flag_format}")
+
 def handle_crypto(file_names, target_folder):
-    cry_choice = multi_prompt(["Encryption", "Decryption", "Frequency Analysis", "Back"], "Options")
-    if cry_choice == "Back":
+    global flag_format
+    choice = multi_prompt(["Encryption", "Decryption", "Frequency Analysis", "Back"], "Options")
+    if choice == "Back":
         return
 
-    if cry_choice == "Frequency Analysis":
+    if choice == "Frequency Analysis":
         lf.warning("GET CIPHERTEXT")
         text = get_text_from_source("Ciphertext: ", file_names, target_folder)
         lf.datain(text)
@@ -87,19 +105,19 @@ def handle_crypto(file_names, target_folder):
         return
 
     lf.warning("GET TEXT")
-    text = get_text_from_source("Ciphertext: " if cry_choice == "Decryption" else "Plaintext: ", file_names, target_folder)
+    text = get_text_from_source("Ciphertext: " if choice == "Decryption" else "Plaintext: ", file_names, target_folder)
     lf.warning("GET KEY")
     key = get_text_from_source("Key: ", file_names, target_folder) if get_bool("Have a key?: ") else ""
 
     lf.warning("INPUT READ")
-    lf.datain(f"{'Ciphertext' if cry_choice == 'Decryption' else 'Plaintext'}: {text}")
+    lf.datain(f"{'Ciphertext' if choice == 'Decryption' else 'Plaintext'}: {text}")
     lf.datain(f"Key: {key}")
 
     if text or key:
-        execute_ciphers("encrypt" if cry_choice == "Encryption" else "decrypt", text, key)
+        execute_ciphers("encrypt" if choice == "Encryption" else "decrypt", text, flag_format, key)
 
 def handle_forensics(file_names, target_folder):
-    choice = multi_prompt(["Hex Viewer", "EXIF Image", "Text Image Extract", "Back"], "Options")
+    choice = multi_prompt(["Hex Viewer", "EXIF Image", "Text Image Extract","PNG Dimensions Bruteforcer","Back"], "Options")
     match choice:
         case "Hex Viewer":
             hex_reader(file_names, target_folder)
@@ -107,6 +125,8 @@ def handle_forensics(file_names, target_folder):
             exif_tool(file_names, target_folder)
         case "Text Image Extract":
             extract_text_from_image()
+        case "PNG Dimensions Bruteforcer":
+            png_dimensions_bruteforcer(file_names,target_folder)
         case "Back":
             return
 
@@ -144,8 +164,26 @@ def handle_crackers(file_names, target_folder):
 def handle_attacks():
     pass
 
-def handle_misc():
-    pass
+def handle_misc(file_names, target_folder):
+    global flag_format
+    choice = multi_prompt(["Netcat","Auto ASCII","Find Flag","Back"], "Options")
+    if choice == "Back":
+        return
+    if choice == "Netcat":
+        user_input = lf.question("Enter nc string: ")
+        connect_with_netcat(user_input)
+    if choice == "Auto ASCII":
+        user_input = lf.question("Enter bin-dec-hex string: ")
+        auto_ascii(user_input)
+    if choice == "Find Flag":
+        user_input = lf.question("Is it a single file? (Y/N): ")
+        if user_input.upper() == "Y":
+            target_file_name = multi_prompt(file_names, "Target file name")
+            file_path = os.path.join(target_folder, target_file_name)
+            find_flag_in_file(file_path,flag_format)
+        elif user_input.upper() == "N":
+            folder_path_input = lf.question("Enter folder path: ")
+            find_flags_in_folder(folder_path_input,flag_format)
 
 def handle_delete_file(file_names, target_folder):
     if multi_prompt(["Delete file", "Back"], "Options") == "Delete file":
@@ -161,23 +199,23 @@ def clear_screen_and_restart():
 def show_menu_options(options):
     console.print("\n[bold green]Available Modules:[/]")
     for key, opt in options.items():
-        console.print(f"[{opt['color']}]{key}[/{opt['color']}]: {opt['title']}")
+        title = opt["title"]() if callable(opt["title"]) else opt["title"]
+        console.print(f"[{opt['color']}]{key}[/{opt['color']}]: {title}")
 
-def core():
-    target_folder, tree, file_names = initialize_directory()
-    
+def core(target_folder_path):
+    target_folder, tree, file_names = initialize_directory(target_folder_path)
     options = {
+        "0": {"title": lambda: f"Flag Format => {flag_format}", "color":"white", "action": handle_flag_format},
         "1": {"title": "Cryptography", "color": "green", "action": lambda: handle_crypto(file_names, target_folder)},
         "2": {"title": "Forensics", "color": "yellow", "action": lambda: handle_forensics(file_names, target_folder)},
         "3": {"title": "OSINT", "color": "violet", "action": handle_osint},
         "4": {"title": "Crackers", "color": "magenta", "action": lambda: handle_crackers(file_names, target_folder)},
         "5": {"title": "Attack Vectors", "color": "violet", "action": handle_attacks},
-        "6": {"title": "Misc", "color": "violet", "action": handle_misc},
+        "6": {"title": "Misc", "color": "violet", "action": lambda: handle_misc(file_names, target_folder)},
         "7": {"title": "Delete file", "color": "cyan", "action": lambda: handle_delete_file(file_names, target_folder)},
         "8": {"title": "Exit", "color": "red", "action": exit_program},
         "clr": {"title": "Input 'clr' to clear console", "color": "yellow", "action": clear_screen_and_restart},
     }
-
     return target_folder, tree, options
 
 def menu(target_folder, tree, options):
@@ -191,9 +229,14 @@ def menu(target_folder, tree, options):
         show_menu_options(options)
 
 def main():
+    global flag_format, target_folder_path
     setup()
-    target_folder, tree, options = core()
+    target_folder, tree, options = core(target_folder_path)
     menu(target_folder, tree, options)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n[!] Program interrupted by user.")
+        input("Press Enter to exit...")
