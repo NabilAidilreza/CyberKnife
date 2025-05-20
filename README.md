@@ -8,10 +8,11 @@ CyberKnife is a versatile tool designed to help you tackle common CTF problems w
 
 ## Features
 - **Cryptography**: Decode/encode Base64, Hex, XOR, Ciphers, and more.
-- **File Analysis**: Analyze files for hidden data, metadata, or embedded content.
+- **Forensics**: Analyze files for hidden data, metadata, or embedded content.
 - **OSINT**: Search for relevant information via keywords and usernames.
-- **Automation**: Automate repetitive tasks to focus on solving challenges.
-
+- **Crackers**: Python Crackers for CPU-intensive challenges
+- **Misc**: Quick tools to find flags
+  
 ---
 
 ## Installation
