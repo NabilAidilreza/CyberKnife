@@ -26,8 +26,6 @@ version = "1.0"
 # Hex View
 # Text Extract
 # PNG BruteForce Dimensions
-# Aperisolve
-# Wireshark
 #? OSINT
 # Wayback Machine
 # Reverse Search Image

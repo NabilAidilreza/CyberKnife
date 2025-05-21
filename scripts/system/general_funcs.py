@@ -2,11 +2,19 @@ import os
 import scripts.system.log_format as lf
 from time import sleep
 from InquirerPy import prompt
-
+from PIL import Image
 
 #! Hub for Main Functions #
 
 #? ### GENERAL ###
+
+def is_valid_image_pil(file_path):
+    try:
+        with Image.open(file_path) as img:
+            img.verify()  # Verify if it's an actual image
+        return True
+    except (IOError, SyntaxError):
+        return False
 
 def read_from_file(file_name,mode):
     """Reads content from a text file and returns it as a string."""
@@ -63,7 +71,6 @@ def delete_selected_file(file_names,target_folder):
             lf.failure(f"Error deleting file '{target_file_name}': {e}")
     else:
         lf.fatal(f"File '{target_file_name}' does not exist in the target folder.")
-
 
 def exit_with_countdown(console,seconds=3):
     for i in range(seconds, 0, -1):

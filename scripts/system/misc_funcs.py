@@ -2,21 +2,13 @@ import os,re
 import sys
 import socket
 import threading
-from PIL import Image
 
 from scripts.system.general_funcs import *
 
 #? ### Misc ###
 
-def is_valid_image_pil(file_path):
-    try:
-        with Image.open(file_path) as img:
-            img.verify()  # Verify if it's an actual image
-        return True
-    except (IOError, SyntaxError):
-        return False
-    
 
+    
 def receive_messages(sock):
     while True:
         try:
@@ -59,7 +51,6 @@ def connect_with_netcat(cmd_string):
         client.close()
         lf.warning("Session Ended")
 
-
 def auto_ascii(s):
     try:
         s = s.strip().replace(",", " ").replace("0x", "").lower()
@@ -77,7 +68,6 @@ def auto_ascii(s):
             lf.success("Flag found: " + flag.group(0)) if flag else lf.dataout(output)
     except Exception as e:
         lf.failure(e)
-
 
 def find_flag_in_file(path,flag_format):
     try:

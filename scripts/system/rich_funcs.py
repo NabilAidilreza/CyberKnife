@@ -1,5 +1,3 @@
-import os
-import shutil
 import pathlib
 
 from rich.filesize import decimal
@@ -7,7 +5,7 @@ from rich.markup import escape
 from rich.text import Text
 from rich.tree import Tree
 
-#! Rich and Misc Functions #
+#! Rich  Functions #
 
 def make_dir_tree(directory):
     tree = Tree(
@@ -46,25 +44,3 @@ def walk_directory(directory: pathlib.Path, tree: Tree) -> None:
             icon = "🗃️ " if path.suffix == ".html" else "📄 "
             tree.add(Text(icon) + text_filename)
     return file_names
-
-def delete_files_in_folder(folder_path):
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print(f"Failed to delete {file_path}. Reason: {e}")
-
-def delete_files_in_output_folders():
-    current_directory = os.getcwd()
-    folder1 = os.path.join(current_directory, 'comparison_tables')
-    folder2 = os.path.join(current_directory, 'calendars')
-
-    if not os.path.exists(folder1) or not os.path.exists(folder2):
-        print("One or both folders do not exist in the current directory.")
-        return
-    delete_files_in_folder(folder1)
-    delete_files_in_folder(folder2)

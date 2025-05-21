@@ -5,7 +5,6 @@ from rich.table import Table
 from PIL.ExifTags import TAGS
 from PIL import Image
 from scripts.system.general_funcs import *
-from scripts.system import is_valid_image_pil
 
 from zlib import crc32
 import struct
