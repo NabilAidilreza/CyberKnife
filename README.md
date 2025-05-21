@@ -1,4 +1,4 @@
-# 🛠️ CyberKnife version 0 — Python Multitool for CTFs
+# 🛠️ CyberKnife v1 — Python Multitool for CTFs
 
 CyberKnife is a modular, Python-based multitool designed to assist in solving **Capture The Flag (CTF)** challenges efficiently. It consolidates essential utilities across various domains like cryptography, forensics, OSINT, and more—making it a must-have in your CTF toolkit.
 
