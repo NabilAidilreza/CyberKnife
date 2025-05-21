@@ -16,7 +16,6 @@ CyberKnife is a modular, Python-based multitool designed to assist in solving **
 - File inspection and extraction tools:
   - Metadata viewer
   - Hex viewer
-  - File signature and magic byte analyzer => Not Done
   - PNG Dimensions Bruteforcer
 
 ### 3. 🌐 OSINT => Not Done
