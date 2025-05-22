@@ -1,6 +1,6 @@
 import os
 import importlib
-import scripts.system.log_format as lf
+from scripts.system import lf, multi_prompt, get_text_from_source, get_bool
 from time import sleep
 
 from .freq_analysis import *
@@ -43,3 +43,31 @@ def execute_ciphers(operation, text,flag_format, key):
         sleep(0.1)
         lf.failure(f"{operation.capitalize()} using {cipher} => {result}") if "fail" in result else lf.success(f"{operation.capitalize()} using {cipher} => {result}")
     lf.warning(f"{operation.upper()}ION END")
+
+
+def handle_crypto(file_names, target_folder):
+    global flag_format
+    choice = multi_prompt(["Encryption", "Decryption", "Frequency Analysis", "Back"], "Options")
+    if choice == "Back":
+        return
+
+    if choice == "Frequency Analysis":
+        lf.warning("GET CIPHERTEXT")
+        text = get_text_from_source("Ciphertext: ", file_names, target_folder)
+        lf.datain(text)
+        lf.warning("CLOSE WINDOW TO CONTINUE...")
+        output = frequency_analysis_graph(text)
+        show_freq_output(output)
+        return
+
+    lf.warning("GET TEXT")
+    text = get_text_from_source("Ciphertext: " if choice == "Decryption" else "Plaintext: ", file_names, target_folder)
+    lf.warning("GET KEY")
+    key = get_text_from_source("Key: ", file_names, target_folder) if get_bool("Have a key?: ") else ""
+
+    lf.warning("INPUT READ")
+    lf.datain(f"{'Ciphertext' if choice == 'Decryption' else 'Plaintext'}: {text}")
+    lf.datain(f"Key: {key}")
+
+    if text or key:
+        execute_ciphers("encrypt" if choice == "Encryption" else "decrypt", text, flag_format, key)

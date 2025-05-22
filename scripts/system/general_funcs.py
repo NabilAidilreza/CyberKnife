@@ -72,9 +72,13 @@ def delete_selected_file(file_names,target_folder):
     else:
         lf.fatal(f"File '{target_file_name}' does not exist in the target folder.")
 
-def exit_with_countdown(console,seconds=3):
+def handle_exit_with_countdown(console,seconds=3):
     for i in range(seconds, 0, -1):
         console.print(f"Exiting program in {i}...", end="\r", style="red")
         sleep(1)
     os.system('cls')
     exit()
+
+def handle_delete_file(file_names, target_folder):
+    if multi_prompt(["Delete file", "Back"], "Options") == "Delete file":
+        delete_selected_file(file_names, target_folder)

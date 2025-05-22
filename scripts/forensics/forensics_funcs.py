@@ -106,3 +106,21 @@ def png_dimensions_bruteforcer(file_names,target_folder):
 
     if (not crcFound):
         lf.failure('Exhausted all dimensions up to (Width, Height): ({}, {})'.format(MAX_WIDTH, MAX_HEIGHT))
+
+
+
+
+
+
+
+
+def handle_forensics(file_names, target_folder):
+    choice = multi_prompt(["Hex Viewer", "EXIF Image", "Text Image Extract","PNG Dimensions Bruteforcer","Back"], "Options")
+    if choice == "Hex Viewer":
+        hex_reader(file_names, target_folder)
+    elif choice == "EXIF Image":
+        exif_tool(file_names, target_folder)
+    elif choice == "Text Image Extract":
+        extract_text_from_image()
+    elif choice == "PNG Dimensions Bruteforcer":
+        png_dimensions_bruteforcer(file_names, target_folder)
