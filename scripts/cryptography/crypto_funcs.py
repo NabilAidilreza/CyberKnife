@@ -45,8 +45,7 @@ def execute_ciphers(operation, text,flag_format, key):
     lf.warning(f"{operation.upper()}ION END")
 
 
-def handle_crypto(file_names, target_folder):
-    global flag_format
+def handle_crypto(file_names, target_folder,flag_format):
     choice = multi_prompt(["Encryption", "Decryption", "Frequency Analysis", "Back"], "Options")
     if choice == "Back":
         return

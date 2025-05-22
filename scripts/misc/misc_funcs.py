@@ -90,8 +90,7 @@ def find_flags_in_folder(folder_path,flag_format):
 
 
 
-def handle_misc(file_names, target_folder):
-    global flag_format
+def handle_misc(file_names, target_folder,flag_format):
     choice = multi_prompt(["Netcat","Auto ASCII","Find Flag","Back"], "Options")
     if choice == "Back":
         return

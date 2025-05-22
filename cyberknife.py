@@ -105,15 +105,16 @@ def show_menu_options(options):
         console.print(f"[{opt['color']}]{key}[/{opt['color']}]: {title}")
 
 def core(target_folder_path):
+    global flag_format
     target_folder, tree, file_names = initialize_directory(target_folder_path)
     options = {
         "0": {"title": lambda: f"Flag Format => {flag_format}", "color": "white", "action": handle_flag_format},
-        "1": {"title": "Cryptography", "color": "green", "action": lambda: handle_crypto(file_names, target_folder)},
+        "1": {"title": "Cryptography", "color": "green", "action": lambda: handle_crypto(file_names, target_folder,flag_format)},
         "2": {"title": "Forensics", "color": "yellow", "action": lambda: handle_forensics(file_names, target_folder)},
         "3": {"title": "OSINT", "color": "violet", "action": handle_osint},
         "4": {"title": "Crackers", "color": "magenta", "action": lambda: handle_crackers(file_names, target_folder)},
         "5": {"title": "Web", "color": "violet", "action": handle_web},
-        "6": {"title": "Misc", "color": "violet", "action": lambda: handle_misc(file_names, target_folder)},
+        "6": {"title": "Misc", "color": "violet", "action": lambda: handle_misc(file_names, target_folder,flag_format)},
         "7": {"title": "Delete file", "color": "cyan", "action": lambda: handle_delete_file(file_names, target_folder)},
         "8": {"title": "Exit", "color": "red", "action": exit_program},
         "clr": {"title": "Input 'clr' to clear console", "color": "yellow", "action": clear_screen_and_restart},
