@@ -20,6 +20,7 @@ CyberKnife is a modular, Python-based multitool designed to assist in solving **
 
 ### 3. 🌐 OSINT => Not Done
 - Gather intel using:
+  - Wayback Machine
   - Username lookups
   - Email checks
   - Keyword-based search links
@@ -29,12 +30,9 @@ CyberKnife is a modular, Python-based multitool designed to assist in solving **
 - Brute-force and wordlist-based tools:
   - Bcrypt Cracker
 
-### 5. 🛠️ Attack Vectors => Not Done
-- Simulate and analyze common vulnerabilities:
-  - LFI, RFI payload builders
-  - Command injection testers
-  - Basic XSS and SQLi templates
-
+### 5. 🌐 Web => Not Done
+- Website analysis tools:
+  - Domain Enumeration Tool
 ### 6. 🧩 Miscellaneous
 - Handy utilities:
   - Netcat
