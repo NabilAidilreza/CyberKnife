@@ -17,13 +17,13 @@ CyberKnife is a modular, Python-based multitool designed to assist in solving **
   - Metadata viewer
   - Hex viewer
   - PNG Dimensions Bruteforcer
+  - GCode Checker
 
 ### 3. 🌐 OSINT => Not Done
 - Gather intel using:
   - Wayback Machine
-  - Username lookups
-  - Email checks
-  - Keyword-based search links
+  - GEOINT Maps
+  - Lookup Links
   - Social media footprinting via URL templates
 
 ### 4. 🔓 Crackers
