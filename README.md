@@ -24,7 +24,6 @@ CyberKnife is a modular, Python-based multitool designed to assist in solving **
   - Wayback Machine
   - GEOINT Maps
   - Lookup Links
-  - Social media footprinting via URL templates
 
 ### 4. 🔓 Crackers
 - Brute-force and wordlist-based tools:
